@@ -1,8 +1,12 @@
 import kotlin.random.Random
 
 fun main() {
-    var randomNumber = Random.nextInt(1, 11)
+    var numFrom = 1
+    var numUntil = 10
+    var randomNumber = Random.nextInt(numFrom, numUntil + 1)
     var lives = 5
+    val levels = 5
+    var currentLevel = 1
 
     while(true) {
         // check if lives is 0
@@ -12,7 +16,7 @@ fun main() {
         }
 
         // prompt the user to guess
-        println("($lives/5) Guess the number from 1-10!")
+        println("($lives/${5 * currentLevel}) Guess the number from $numFrom-$numUntil!")
         val guess = readln().toIntOrNull()
 
         // check if guess is valid number
@@ -22,24 +26,32 @@ fun main() {
         // check if guess is correct
         } else if(guess == randomNumber) {
             println("Your guess is correct!")
+            currentLevel++
+            
+            // completed all levels
+            if(currentLevel > levels) {
+                println("You completed all the levels, congrats!")
+                return
+            }
 
             // play again?
             while(true) {
                 print("Continue? (Y/n)")
                 val choice = readln().lowercase()
-                
+
                 if(choice == "n") {
                     return
                 } else if(choice == "y" || choice == "") {
-                    randomNumber = Random.nextInt(1, 11)
-                    lives = 5
+                    numUntil += 10
+                    randomNumber = Random.nextInt(numFrom, numUntil)
+                    lives = 5*currentLevel
                     break
                 } else {
                     println("invalid input")
                     continue
                 }
             }
-        
+
         // guess is lower
         } else if(guess < randomNumber) {
             println("Your guess is lower.")
